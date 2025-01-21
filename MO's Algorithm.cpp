@@ -94,43 +94,44 @@ int main()
             cin>>a[i];
         }
         vector<st> v(q);
-        d=ceil(sqrt(n));
+        d=sqrt(n);
         for(i=0;i<q;i++){
-            cin>>v[i].a>>v[i].b;
-            v[i].ind=i;
-        }
+            cin>>v[i].a>>v[i].b;            // frequency count within a range
+            v[i].ind=i;                     // Problem link: https://codeforces.com/contest/220/problem/B
+        }                                                            
         sort(v.begin(),v.end(),cmp);
-        vector<int> ans(q);
-        map<int,int> freq;
+        vector<int> ans(q),freq(n+5);
         int count=0;
-        freq[a[0]]++;
         int i=j=0;
-        if(freq[a[0]]==a[0]) count++;
+        if(a[0]<=n){
+            freq[a[0]]++;
+            if(freq[a[0]]==a[0]) count++;
+        }
         for(auto x: v){
             x.a--,x.b--;
             while(i>x.a){
                 i--;
-                if(freq[a[i]]==a[i]) count--;
-                freq[a[i]]++;
-                if(freq[a[i]]==a[i]) count++;
+                if(a[i]<=n and freq[a[i]]==a[i]) count--;
+                if(a[i]<=n) freq[a[i]]++;
+                if(a[i]<=n and freq[a[i]]==a[i]) count++;
             }
             while(i<x.a){
-                if(freq[a[i]]==a[i]) count--;
-                if(freq[a[i]]==a[i]+1) count++;
-                freq[a[i]]--;
+                if(a[i]<=n and freq[a[i]]==a[i]) count--;
+                if(a[i]<=n and freq[a[i]]==a[i]+1) count++;
+                if(a[i]<=n) freq[a[i]]--;
                 i++;
             }
             while(j>x.b){
-                if(freq[a[j]]==a[j]) count--;
-                if(freq[a[j]]==a[j]+1) count++;
-                freq[a[j]]--;
+                if(a[j]<=n and freq[a[j]]==a[j]) count--;
+                if(a[j]<=n and freq[a[j]]==a[j]+1) count++;
+                if(a[j]<=n) freq[a[j]]--;
                 j--;
             }
             while(j<x.b){
                 j++;
-                if(freq[a[j]]==a[j]) count--;
-                freq[a[j]]++;
-                if(freq[a[j]]==a[j]) count++;
+                if(a[j]<=n and freq[a[j]]==a[j]) count--;
+                if(a[j]<=n) freq[a[j]]++;
+                if(a[j]<=n and freq[a[j]]==a[j]) count++;
             }
             ans[x.ind]=count;
         }
